@@ -1,21 +1,9 @@
 import { useState } from 'react'
 import './App.css'
 
-const Header = () => {
-  return (
-    <>
-      <h1>How was your experience with unicafe?</h1>
-    </>
-  )
-}
+const Header = () => <h1>How was your experience with unicafe?</h1>
 
-const Button = ({ handleClick, text }) => {
-  return (
-    <button onClick = {handleClick}>
-      {text}
-    </button>
-  )
-}
+const Button = ({ handleClick, text }) => <button onClick = {handleClick}>{text}</button>
 
 const StatisticLine = ({ text, value }) => {
   return (
@@ -30,14 +18,8 @@ const StatisticLine = ({ text, value }) => {
 
 const Statistics = ({ good, neutral, bad }) => {
   const findTotal = () => good + neutral + bad
-  const findAverage = () => {
-    if (findTotal() === 0) return 0
-    else return (good - bad)/findTotal()
-  }
-  const findPercentPositive = () => {
-    if (findTotal() === 0) return 0
-    else return good/findTotal()*100
-  }
+  const findAverage = () => (good - bad)/findTotal()
+  const findPercentPositive = () => good/findTotal()*100
   
   if (findTotal() === 0) {
     return (
