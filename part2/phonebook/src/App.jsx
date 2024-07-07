@@ -11,9 +11,11 @@ const App = () => {
   const [filter, setFilter] = useState('')
   const [list, setList] = useState(persons)
 
+  const url = 'http://localhost:3001/persons'
+
   useEffect(() => {
     axios
-      .get('http://localhost:3001/persons')
+      .get(url)
       .then(response => {
         setPersons(response.data)
         setList(response.data)
@@ -67,6 +69,7 @@ const App = () => {
       setNewName('')
       setNewNumber('')
       setList(newPersonsData.filter(person => person.name.toLowerCase().includes(filter.toLowerCase()))) 
+      axios.post(url, newPersonObject)
     }
   }
 
