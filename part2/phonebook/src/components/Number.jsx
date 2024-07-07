@@ -1,3 +1,3 @@
-const Number = ({ entry }) => <div key={entry.id}>{entry.name} {entry.number}</div>
+const Number = ({ entry }) => <div>{entry.name} {entry.number}</div>
 
 export default Number

@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import axios from 'axios'
 import Filter from './components/Filter'
 import AddNew from './components/AddNew'
 import NumbersList from './components/NumbersList'
@@ -9,6 +10,15 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
   const [list, setList] = useState(persons)
+
+  useEffect(() => {
+    axios
+      .get('http://localhost:3001/persons')
+      .then(response => {
+        setPersons(response.data)
+        setList(response.data)
+      })
+  },[])
 
   const handleInputNameChange = (event) => {
     setNewName(event.target.value)
