@@ -1,8 +1,11 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
+import personService from './services/persons.js'
+import Notification from './components/Notification'
 import Filter from './components/Filter'
 import AddNew from './components/AddNew'
 import NumbersList from './components/NumbersList'
+
+const url = 'http://localhost:3001/persons'
 
 const App = () => {
   const [persons, setPersons] = useState([]) 
@@ -10,16 +13,14 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
   const [list, setList] = useState(persons)
-
-  const url = 'http://localhost:3001/persons'
+  const [notification, setNotification] = useState('')
+  const [notificationObject, setNotificationObject] = useState('')
 
   useEffect(() => {
-    axios
-      .get(url)
-      .then(response => {
-        setPersons(response.data)
-        setList(response.data)
-      })
+    personService.getAll().then(initialPersons => {
+      setPersons(initialPersons)
+      setList(initialPersons)
+    })
   },[])
 
   const handleInputNameChange = (event) => {
@@ -49,33 +50,94 @@ const App = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault()
-    
+    console.log(event.target)
     const isName = persons.filter(person => person.name === newName).length > 0
     const isNumber = persons.filter(person => person.number === newNumber).length > 0
 
     if (isName || isNumber) {
       if (!isName) alert(`${newNumber} is already a phone number`)
-      else if (!isNumber) alert(`${newName} is already a name`)
-      else alert('Both name and number that you entered have been taken')
+      else if (!isNumber) {
+        const isUpdate = confirm(`Do you want to update the number of ${newName} to ${newNumber}?`)
+        if (isUpdate) {
+          const personToUpdate = persons.find(person => person.name === newName)
+          personService.updatePerson(personToUpdate, newNumber)
+          .then(() => {
+            personToUpdate.number = newNumber
+            setPersons(persons.map(person => person.id === personToUpdate.id ? personToUpdate : person))
+            setList(list.map(entry => entry.id === personToUpdate.id ? personToUpdate : entry))
+
+            setNotification('updateNumber')
+            setNotificationObject(
+              {
+                name: newName,
+                number: newNumber
+              }
+            )
+        
+            setTimeout(() => {
+              setNotification('')
+              setNotificationObject({
+                name: '',
+                number: ''
+              })
+            }, 5000)
+          })
+          .catch(error => {
+            setPersons(persons.filter(person => person.name !== newName))
+            setList(list.filter(entry => entry.name !== newName))
+            setNotification('error')
+            setNotificationObject(
+              {
+                name: newName,
+                number: newNumber
+              }
+            )
+        
+            setTimeout(() => {
+              setNotification('')
+              setNotificationObject({
+                name: '',
+                number: ''
+              })
+            }, 5000)
+          })
+        }
+      }
+      else alert('Both name and number that you entered are included in the phonebook')
     }
     else{
       const newPersonObject = {
         name: newName,
         number: newNumber,
-        id: persons.length + 1,
       }
-      const newPersonsData = persons.concat(newPersonObject)
-      setPersons(newPersonsData)
-      setNewName('')
-      setNewNumber('')
-      setList(newPersonsData.filter(person => person.name.toLowerCase().includes(filter.toLowerCase()))) 
-      axios.post(url, newPersonObject)
+      personService.create(newPersonObject).then(response => {
+        const newPersonsData = persons.concat(response)
+        setPersons(newPersonsData)
+        setNewName('')
+        setNewNumber('')
+        setList(newPersonsData.filter(person => person.name.toLowerCase().includes(filter.toLowerCase()))) 
+        
+        setNotification('addPerson')
+        setNotificationObject({
+          name: newName,
+          number: newNumber
+        })
+        
+        setTimeout(() => {
+          setNotification('')
+          setNotificationObject({
+            name: '',
+            number: ''
+          })
+        }, 5000)
+      })
     }
   }
 
   return (
     <div>
       <h1>Phonebook</h1>
+      <Notification type={notification} object={notificationObject} />
       <Filter handleFilterChange={handleFilterChange} filter={filter} />
       <AddNew 
         newName={newName} 
@@ -84,7 +146,7 @@ const App = () => {
         handleInputNumberChange={handleInputNumberChange}
         handleSubmit={handleSubmit}
       />
-      <NumbersList list={list} />
+      <NumbersList list={list} setList={setList} persons={persons} setPersons={setPersons} setNotification={setNotification} setNotificationObject={setNotificationObject}/>
     </div>
   )
 }
