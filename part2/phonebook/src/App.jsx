@@ -50,7 +50,6 @@ const App = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault()
-    console.log(event.target)
     const isName = persons.filter(person => person.name === newName).length > 0
     const isNumber = persons.filter(person => person.number === newNumber).length > 0
 
