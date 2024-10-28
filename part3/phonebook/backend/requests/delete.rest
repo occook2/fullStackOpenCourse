@@ -1,0 +1,7 @@
+DELETE https://backend-still-butterfly-8494.fly.dev/api/persons/2
+
+###
+GET https://backend-still-butterfly-8494.fly.dev/api/persons/2
+
+###
+GET https://backend-still-butterfly-8494.fly.dev/api/persons
