@@ -72,34 +72,26 @@ const App = () => {
                 number: newNumber
               }
             )
-        
-            setTimeout(() => {
-              setNotification('')
-              setNotificationObject({
-                name: '',
-                number: ''
-              })
-            }, 5000)
           })
           .catch(error => {
-            setPersons(persons.filter(person => person.name !== newName))
-            setList(list.filter(entry => entry.name !== newName))
             setNotification('error')
             setNotificationObject(
               {
                 name: newName,
-                number: newNumber
+                number: newNumber,
+                error: error.response.data.error,
               }
             )
         
-            setTimeout(() => {
-              setNotification('')
-              setNotificationObject({
-                name: '',
-                number: ''
-              })
-            }, 5000)
+            
           })
+          setTimeout(() => {
+            setNotification('')
+            setNotificationObject({
+              name: '',
+              number: ''
+            })
+          }, 5000)
         }
       }
       else alert('Both name and number that you entered are included in the phonebook')
@@ -109,7 +101,8 @@ const App = () => {
         name: newName,
         number: newNumber,
       }
-      personService.create(newPersonObject).then(response => {
+      personService.create(newPersonObject)
+      .then(response => {
         const newPersonsData = persons.concat(response)
         setPersons(newPersonsData)
         setNewName('')
@@ -121,15 +114,24 @@ const App = () => {
           name: newName,
           number: newNumber
         })
-        
-        setTimeout(() => {
-          setNotification('')
-          setNotificationObject({
-            name: '',
-            number: ''
-          })
-        }, 5000)
       })
+      .catch(error => {
+        console.log(error.response.data.error)
+        setNotification('error')
+        setNotificationObject({
+          name: newName,
+          number: newNumber,
+          error: error.response.data.error,
+        })
+      })
+
+      setTimeout(() => {
+        setNotification('')
+        setNotificationObject({
+          name: '',
+          number: ''
+        })
+      }, 5000)
     }
   }
 

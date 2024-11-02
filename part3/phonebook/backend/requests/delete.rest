@@ -1,7 +1,10 @@
-DELETE https://backend-still-butterfly-8494.fly.dev/api/persons/2
+GET http://localhost:3001/api/persons
+###
+
+DELETE http://localhost:3001/api/persons/67211610b65406997f606550
 
 ###
-GET https://backend-still-butterfly-8494.fly.dev/api/persons/2
+GET http://localhost:3001/api/persons/67211610b65406997f606550
 
 ###
 GET https://backend-still-butterfly-8494.fly.dev/api/persons

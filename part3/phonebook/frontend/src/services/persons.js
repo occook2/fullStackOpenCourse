@@ -5,7 +5,8 @@ const getAll = () => axios.get(baseUrl).then(response => response.data)
 
 const create = newPerson => {
     const request = axios.post(baseUrl, newPerson)
-    return request.then(response => response.data)
+    return request
+        .then(response => response.data)
 }
 
 const deletePerson = id => {

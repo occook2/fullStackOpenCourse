@@ -1,27 +1,20 @@
-GET https://backend-still-butterfly-8494.fly.dev/api/persons
+GET https://backend-still-butterfly-8494.fly.dev/api/persons/
+###
+
+GET http://localhost:3001/api/persons
+###
+
+GET http://localhost:3001/api/persons/6721177f99e6a081970f5c2d
+
+###
+GET http://localhost:3001/api/persons/3
+
 ###
 POST https://backend-still-butterfly-8494.fly.dev/api/persons HTTP/1.1
 content-type: application/json
 
 {
-    "name": "Test User", 
-    "number": "39-23-6423122"
-}
-
-###
-POST https://backend-still-butterfly-8494.fly.dev/api/persons HTTP/1.1
-content-type: application/json
-
-{ 
-    "name": "Mary Poppendieck", 
-    "number": "39-23-6423122"
-}
-
-###
-POST https://backend-still-butterfly-8494.fly.dev/api/persons HTTP/1.1
-content-type: application/json
-
-{  
+    "name": "TestUser Mongo", 
     "number": "39-23-6423122"
 }
 
@@ -30,5 +23,6 @@ POST http://localhost:3001/api/persons/ HTTP/1.1
 content-type: application/json
 
 {  
-    "name": "Mary Poppendieck"
+    "name": "Added Mongo",
+    "number": "42-42-4242424"
 }

@@ -5,7 +5,7 @@ const Notification = ({type, object}) => {
     else if (type === 'error') {
       return (
         <div className='error'>
-          Information for {object.name} has already been removed from server
+          {object.error}
         </div>
       )
     }
